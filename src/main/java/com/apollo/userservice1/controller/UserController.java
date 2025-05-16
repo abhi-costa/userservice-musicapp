@@ -32,6 +32,7 @@ public class UserController {
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody CreateUserRequest request) {
+		System.out.println("inside register api");
 		try {
 			if (!StringUtils.hasText(request.getUsername()) || !StringUtils.hasText(request.getEmail())
 					|| !StringUtils.hasText(request.getPassword())) {
