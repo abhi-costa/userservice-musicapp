@@ -159,7 +159,7 @@ public class UserServiceIMPL implements UserService {
 	 * operations in Keycloak.
 	 */
 	private String getAdminAccessToken() {
-		Map<String, Object> tokenData = authenticateWithKeycloak(adminUsername, adminPassword, ADMIN_CLI);
+		Map<String, Object> tokenData = authenticateWithKeycloak(adminUsername, adminPassword, clientId);
 		return tokenData.get("access_token").toString();
 	}
 }
