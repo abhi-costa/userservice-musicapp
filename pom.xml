@@ -62,10 +62,15 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
+	<!--	<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>-->
+		<!--		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-client</artifactId>
 		</dependency>
+-->
 
 		<!--
 		https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
@@ -75,7 +80,7 @@
 			<version>3.4.4</version>
 		</dependency>-->
 
-		<dependency>
+	<!--	<dependency>
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-spring-boot-starter</artifactId>
 			<version>22.0.5</version>
@@ -85,17 +90,14 @@
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency>-->
+
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-oauth2-client</artifactId>
-		</dependency>
 
 	</dependencies>
 
