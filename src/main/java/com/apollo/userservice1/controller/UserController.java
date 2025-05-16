@@ -39,6 +39,7 @@ public class UserController {
 				return ResponseEntity.badRequest().body("Username, email, and password must not be null or empty.");
 			}
 			UserResponse response = userService.register(request);
+			System.out.println("sucessfully register");
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		} catch (RuntimeException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
@@ -56,12 +57,14 @@ public class UserController {
 	 */
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+		System.out.println("welcome to login");
 		try {
 			if (!StringUtils.hasText(request.getUsername()) || !StringUtils.hasText(request.getPassword())) {
 				return ResponseEntity.badRequest().body("Username and password must not be null or empty.");
 			}
 
 			LoginResponse response = userService.login(request);
+			System.out.println("sucessfully login");
 			return ResponseEntity.ok(response);
 		} catch (RuntimeException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());

@@ -54,13 +54,14 @@ public class UserServiceIMPL implements UserService {
 	 */
 	@Override
 	public UserResponse register(CreateUserRequest req) {
+		System.out.println("welcome to register");
 		// Step 1: Register user in Keycloak
 		createUserInKeycloak(req);
-
+		System.out.println("sucessfully  register in keycloak");
 		// Step 2: Store user profile (without password) in MongoDB
 		User user = new User(req.getUsername(), req.getEmail(), req.getFirstName(), req.getLastName());
 		User savedUser = repo.save(user);
-
+		System.out.println("sucessfully  register");
 		return new UserResponse(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(),
 				savedUser.getFirstName(), savedUser.getLastName());
 	}
@@ -70,8 +71,9 @@ public class UserServiceIMPL implements UserService {
 	 */
 	@Override
 	public LoginResponse login(LoginRequest req) {
+		System.out.println("login service");
 		Map<String, Object> tokenResponse = authenticateWithKeycloak(req.getUsername(), req.getPassword(), clientId);
-
+		System.out.println("sucessfully login"+ tokenResponse);
 		return new LoginResponse(tokenResponse.get("access_token").toString(),
 				tokenResponse.get("refresh_token").toString(), (int) tokenResponse.get("expires_in"));
 	}
@@ -92,6 +94,7 @@ public class UserServiceIMPL implements UserService {
 	 * data.
 	 */
 	private void createUserInKeycloak(CreateUserRequest req) {
+		System.out.println("welcome to createUserInKeycloak");
 		String url = keycloakServerUrl + "/admin/realms/" + realm + "/users";
 
 		HttpHeaders headers = new HttpHeaders();
@@ -105,17 +108,21 @@ public class UserServiceIMPL implements UserService {
 		payload.put("enabled", true);
 		payload.put("firstName", req.getFirstName());
 		payload.put("lastName", req.getLastName());
+		
+		System.out.println("paylode--"+ payload.toString());
 
 		Map<String, Object> credentials = new HashMap<>();
 		credentials.put("type", "password");
 		credentials.put("value", req.getPassword());
 		credentials.put("temporary", false);
-
 		payload.put("credentials", new Object[] { credentials });
+		System.out.println("credentials- "+ credentials);
 
 		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(payload, headers);
+		System.out.println("7--" +entity);
 
 		ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+		
 
 		if (!response.getStatusCode().is2xxSuccessful()) {
 			throw new RuntimeException("Failed to register user in Keycloak: " + response.getBody());
@@ -138,6 +145,7 @@ public class UserServiceIMPL implements UserService {
 		body.add("password", password);
 
 		HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, headers);
+		System.out.println(" 0 ------------->" + body);
 
 		try {
 			ResponseEntity<Map> response = restTemplate.postForEntity(url, entity, Map.class);
@@ -145,11 +153,15 @@ public class UserServiceIMPL implements UserService {
 
 			if (!response.getStatusCode().is2xxSuccessful() || tokenData == null
 					|| !tokenData.containsKey("access_token")) {
+				System.out.println("3 --- Invalid credentials");
 				throw new RuntimeException("Invalid credentials");
+				
 			}
-
+			System.out.println("4--" +tokenData);
 			return tokenData;
+			
 		} catch (Exception e) {
+			System.out.println("5--> failed");
 			throw new RuntimeException("Failed to authenticate user", e);
 		}
 	}
@@ -159,7 +171,9 @@ public class UserServiceIMPL implements UserService {
 	 * operations in Keycloak.
 	 */
 	private String getAdminAccessToken() {
+		System.out.println("1---- inside etAdminAccessToken");
 		Map<String, Object> tokenData = authenticateWithKeycloak(adminUsername, adminPassword, clientId);
+		System.out.println("2 --- token data" + tokenData.toString());
 		return tokenData.get("access_token").toString();
 	}
 }
